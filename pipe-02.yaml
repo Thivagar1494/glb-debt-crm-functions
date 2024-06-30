@@ -1,0 +1,49 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  azureSubscription: 'My-Azure-Subscription' # Replace with your Azure subscription name
+  resourceGroupName: 'demo-rg'
+  location: 'East US'
+  appServicePlanId: 'azurerm_app_service_plan.asp.id' # Replace with your App Service Plan ID
+  storageAccountName: 'glbdebtcrmsa' # Replace with your Storage Account Name
+  storageAccountAccessKey: 'azurerm_storage_account.sa.primary_access_key' # Replace with your Storage Account Access Key
+
+steps:
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: $(azureSubscription)
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+      # Install Terraform
+      curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+      . ~/.nvm/nvm.sh
+      nvm install 12.18.3
+      nvm use 12.18.3
+      sudo apt-get install -y unzip
+      curl -LO https://releases.hashicorp.com/terraform/0.12.24/terraform_0.12.24_linux_amd64.zip
+      unzip terraform_0.12.24_linux_amd64.zip
+      sudo mv terraform /usr/local/bin/
+      rm terraform_0.12.24_linux_amd64.zip
+      
+      # Change to the Terraform configuration directory
+      cd modules/function_app
+
+      # Initialize Terraform
+      terraform init
+
+      # Plan Terraform changes
+      terraform plan -out=tfplan -input=false \
+        -var "function_app_name=glb-debt-crm-functions" \
+        -var "resource_group_name=$(resourceGroupName)" \
+        -var "location=$(location)" \
+        -var "app_service_plan_id=$(appServicePlanId)" \
+        -var "storage_account_name=$(storageAccountName)" \
+        -var "storage_account_access_key=$(storageAccountAccessKey)"
+
+      # Apply Terraform changes
+      terraform apply -input=false tfplan
