@@ -1,48 +1,19 @@
 trigger:
-- main
+  branches:
+    include:
+      - main  # Replace with your branch name
 
 pool:
   vmImage: 'ubuntu-latest'
 
-variables:
-  azureSubscription: 'demo-connection' # Replace with your Azure subscription name
-  resourceGroupName: 'demo-rg'
-  location: 'East US'
-  appServicePlanId: '/subscriptions/your-subscription-id/resourceGroups/demo-rg/providers/Microsoft.Web/serverFarms/gldebtcrmsa-asp' # Replace with your App Service Plan ID
-  storageAccountName: 'glbdebtcrmsa' # Replace with your Storage Account Name
-  storageAccountAccessKey: 'your-storage-account-access-key' # Replace with your Storage Account Access Key
-
-jobs:
-- job: Job
-  steps:
-  - task: AzureCLI@2
-    inputs:
-      azureSubscription: $(azureSubscription)
-      scriptType: bash
-      scriptLocation: inlineScript
-      inlineScript: |
-        # Install Terraform
-        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
-        . ~/.nvm/nvm.sh
-        nvm install 12.18.3
-        nvm use 12.18.3
-        sudo apt-get install -y unzip
-        curl -LO https://releases.hashicorp.com/terraform/0.12.24/terraform_0.12.24_linux_amd64.zip
-        unzip terraform_0.12.24_linux_amd64.zip
-        sudo mv terraform /usr/local/bin/
-        rm terraform_0.12.24_linux_amd64.zip
-
-        # Initialize Terraform
-        terraform init
-
-        # Plan Terraform changes
-        terraform plan -out=tfplan -input=false \
-          -var "function_app_name=glb-debt-crm-functions" \
-          -var "resource_group_name=$(resourceGroupName)" \
-          -var "location=$(location)" \
-          -var "app_service_plan_id=$(appServicePlanId)" \
-          -var "storage_account_name=$(storageAccountName)" \
-          -var "storage_account_access_key=$(storageAccountAccessKey)"
-
-        # Apply Terraform changes
-        terraform apply -input=false tfplan
+steps:
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'demo-connection'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      # Replace with Terraform commands to initialize and apply
+      terraform init
+      terraform apply -auto-approve
+    addSpnToEnvironment: true
