@@ -8,7 +8,9 @@ terraform {
 }
 
 provider "azurerm" {
-  features {}
+  features {
+    
+  }
 }
 
 module "resource_group" {
