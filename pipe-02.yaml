@@ -31,9 +31,6 @@ jobs:
         unzip terraform_0.12.24_linux_amd64.zip
         sudo mv terraform /usr/local/bin/
         rm terraform_0.12.24_linux_amd64.zip
-        
-        # Change to the Terraform configuration directory
-        cd modules/function_app
 
         # Initialize Terraform
         terraform init
