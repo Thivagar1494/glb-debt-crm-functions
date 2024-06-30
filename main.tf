@@ -21,7 +21,6 @@ module "resource_group" {
 
 module "storage_account" {
   source              = "./modules/storage_account"
-  depends_on           = [module.resource_group]
   storage_account_name = var.storage_account_name
   resource_group_name  = var.resource_group_name
   location             = var.location
@@ -30,7 +29,6 @@ module "storage_account" {
 module "app_service_plan" {
   source              = "./modules/app_service_plan"
   app_service_plan_name = "glb-debt-crm-asp"
-  depends_on           = [module.resource_group]
   resource_group_name  = var.resource_group_name
   location             = var.location
 }
@@ -38,7 +36,6 @@ module "app_service_plan" {
 module "function_app" {
   source                  = "./modules/function_app"
   function_app_name       = var.function_app_name
-  depends_on           = [module.resource_group]
   resource_group_name     = var.resource_group_name
   location                = var.location
   app_service_plan_id     = module.app_service_plan.id
