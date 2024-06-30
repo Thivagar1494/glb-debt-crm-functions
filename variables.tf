@@ -1,7 +1,7 @@
 variable "resource_group_name" {
   description = "The name of the resource group"
   type        = string
-  default     = "demo-glb-debt-crm-rg"
+  default     = "glb-debt-crm-rg"
 }
 
 variable "location" {
