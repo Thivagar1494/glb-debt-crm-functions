@@ -31,5 +31,4 @@ variable "function_app_name" {
 variable "storage_account_access_key" {
   description = "The access key of the storage account"
   type        = string
-  sensitive   = false
 }
