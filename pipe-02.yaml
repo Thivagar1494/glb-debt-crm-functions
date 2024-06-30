@@ -5,7 +5,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  azureSubscription: 'My-Azure-Subscription' # Replace with your Azure subscription name
+  azureSubscription: 'demo-connection' # Replace with your Azure subscription name
   resourceGroupName: 'demo-rg'
   location: 'East US'
   appServicePlanId: 'azurerm_app_service_plan.asp.id' # Replace with your App Service Plan ID
