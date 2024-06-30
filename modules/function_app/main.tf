@@ -1,7 +1,3 @@
-provider "azurerm" {
-  features {}
-}
-
 resource "azurerm_function_app" "fa" {
   name                       = var.function_app_name
   location                   = var.location
